@@ -27,6 +27,7 @@ func TestProvider_HasChildResources(t *testing.T) {
 		"azuredevops_serviceendpoint_aws",
 		"azuredevops_variable_group",
 		"azuredevops_git_repository",
+		"azuredevops_git_repository_file",
 		"azuredevops_user_entitlement",
 		"azuredevops_group_membership",
 		"azuredevops_group",
