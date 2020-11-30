@@ -78,6 +78,12 @@ func Provider() *schema.Provider {
 				Description: "The personal access token which should be used.",
 				Sensitive:   true,
 			},
+			"ignore_client_errors": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Default:     false,
+				Description: "If true errors on inititating the client will be ignored.",
+			},
 		},
 	}
 
@@ -95,8 +101,12 @@ func providerConfigure(p *schema.Provider) schema.ConfigureFunc {
 			terraformVersion = "0.11+compatible"
 		}
 
-		client, err := client.GetAzdoClient(d.Get("personal_access_token").(string), d.Get("org_service_url").(string), terraformVersion)
+		c, err := client.GetAzdoClient(d.Get("personal_access_token").(string), d.Get("org_service_url").(string), terraformVersion)
+		if err != nil && d.Get("ignore_client_errors").(bool) {
+			err = nil
+			c = &client.AggregatedClient{}
+		}
 
-		return client, err
+		return c, err
 	}
 }
